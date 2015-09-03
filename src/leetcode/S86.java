@@ -48,10 +48,47 @@ public class S86 {
         return  finalList.next;
     }
 
+    public ListNode partition1(ListNode head, int x) {
+        if(head == null || head.next == null)    return head;
+
+        ListNode p = head;
+
+        ListNode newHead = new ListNode(-1);
+        newHead.next = head;
+
+        int time = 0;
+        while(p.next != null){
+            p = p.next;
+            time++;
+        }
+        ListNode tail = p;
+        tail.next = null;
+
+        p = head;
+        ListNode q = newHead;
+        ListNode pTail = tail;
+
+        while(time-- >= 0){
+            if(p.val >= x && p != pTail){
+                q.next = p.next;
+                p.next = pTail.next;
+                pTail.next = p;
+                pTail = pTail.next;
+                p = q.next;
+            }
+            else{
+                p = p.next;
+                q = q.next;
+            }
+        }
+
+        return newHead.next;
+    }
+
     public static void main(String[] args){
         S86 s = new S86();
 
-        int[] num = {11,11};
+        int[] num = {1,2,3};
         ListNode head = new ListNode(num[0]);
         ListNode p = head;
         for(int i = 1;i < num.length;i++){
@@ -60,7 +97,7 @@ public class S86 {
             p = node;
         }
 
-        ListNode result = s.partition(head,0);
+        ListNode result = s.partition1(head,3);
         while(result != null){
             System.out.print(result.val);
             result = result.next;
